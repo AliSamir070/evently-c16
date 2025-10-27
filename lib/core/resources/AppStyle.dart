@@ -3,7 +3,22 @@ import 'package:flutter/material.dart';
 
 class AppStyle{
   static ThemeData lightTheme = ThemeData(
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: ColorsManager.primaryColor,
+      shape: StadiumBorder(
+          side: BorderSide(
+              color: Colors.white,
+              width: 5
+          )
+      )
+    ),
     scaffoldBackgroundColor: ColorsManager.lightBackgroundColor,
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: ColorsManager.primaryColor,
+        type: BottomNavigationBarType.fixed,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.white
+    ),
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.transparent,
       centerTitle: true,
@@ -43,6 +58,21 @@ class AppStyle{
      )
   );
   static ThemeData darkTheme = ThemeData(
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: ColorsManager.darkBackgroundColor,
+          shape: StadiumBorder(
+            side: BorderSide(
+              color: Colors.white,
+              width: 5
+            )
+          )
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: ColorsManager.darkBackgroundColor,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.white
+      ),
     scaffoldBackgroundColor: ColorsManager.darkBackgroundColor,
     appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,

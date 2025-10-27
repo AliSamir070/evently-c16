@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently_c16/core/resources/AppStyle.dart';
 import 'package:evently_c16/core/resources/RoutesManager.dart';
-import 'package:evently_c16/core/source/remote/PrefsManager.dart';
+import 'package:evently_c16/core/source/local/PrefsManager.dart';
 import 'package:evently_c16/providers/ThemeProvider.dart';
+import 'package:evently_c16/providers/UserProvider.dart';
+import 'package:evently_c16/ui/home/screen/home_screen.dart';
 import 'package:evently_c16/ui/login/screen/login_screen.dart';
 import 'package:evently_c16/ui/register/screen/register_screen.dart';
 import 'package:evently_c16/ui/splash/screen/splash_screen.dart';
@@ -46,13 +48,16 @@ class MyApp extends StatelessWidget {
       theme: AppStyle.lightTheme,
       darkTheme: AppStyle.darkTheme,
       themeMode: provider.mode,
-      initialRoute: RoutesManager.start,
+      initialRoute: RoutesManager.splash,
       debugShowCheckedModeBanner: false,
       routes: {
         RoutesManager.splash:(_)=>SplashScreen(),
         RoutesManager.start:(_)=>StartScreen(),
         RoutesManager.login:(_)=>LoginScreen(),
-        RoutesManager.register:(_)=>RegisterScreen()
+        RoutesManager.register:(_)=>RegisterScreen(),
+        RoutesManager.home:(_)=>ChangeNotifierProvider(
+            create: (context) => UserProvider(),
+            child: HomeScreen()),
       },
     );
   }

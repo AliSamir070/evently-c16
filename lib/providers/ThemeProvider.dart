@@ -1,4 +1,4 @@
-import 'package:evently_c16/core/source/remote/PrefsManager.dart';
+import 'package:evently_c16/core/source/local/PrefsManager.dart';
 import 'package:flutter/material.dart';
 // observable
 // publisher

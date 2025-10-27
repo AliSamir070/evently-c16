@@ -4,7 +4,7 @@ import 'package:evently_c16/core/resources/AssetsManager.dart';
 import 'package:evently_c16/core/resources/RoutesManager.dart';
 import 'package:evently_c16/core/resources/StringsManager.dart';
 import 'package:evently_c16/core/reusable_components/CustomSwitch.dart';
-import 'package:evently_c16/core/source/remote/PrefsManager.dart';
+import 'package:evently_c16/core/source/local/PrefsManager.dart';
 import 'package:evently_c16/main.dart';
 import 'package:evently_c16/providers/ThemeProvider.dart';
 import 'package:flutter/material.dart';

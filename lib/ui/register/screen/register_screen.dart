@@ -1,12 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently_c16/core/resources/AppConstants.dart';
+import 'package:evently_c16/core/resources/DialogUtils.dart';
 import 'package:evently_c16/core/resources/RoutesManager.dart';
 import 'package:evently_c16/core/reusable_components/CustomButton.dart';
+import 'package:evently_c16/core/source/remote/FirestoreManager.dart';
 import 'package:evently_c16/ui/register/screen/register_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:evently_c16/model/User.dart' as MyUser;
 import '../../../core/resources/AssetsManager.dart';
 import '../../../core/reusable_components/CustomField.dart';
 import '../../../core/reusable_components/CustomSwitch.dart';
@@ -48,9 +50,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     selectedLanguage = context.locale.languageCode;
     return Scaffold(
-     appBar: AppBar(
-       title: Text("Register"),
-     ),
+      appBar: AppBar(
+        title: Text("Register"),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SafeArea(
@@ -65,7 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   CustomField(
                       validation: (value) {
-                        if(value == null || value.isEmpty){
+                        if (value == null || value.isEmpty) {
                           return "Name shouldn't be empty";
                         }
                       },
@@ -113,7 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   CustomField(
                     controller: rePasswordController,
                     validation: (value) {
-                      if(value != passwordController.text){
+                      if (value != passwordController.text) {
                         return "Passwords don't match";
                       }
                       return null;
@@ -138,14 +140,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                        Text("alreadyHaveAcc".tr(),style: Theme.of(context).textTheme.bodyMedium,),
+                      Text("alreadyHaveAcc".tr(), style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyMedium,),
                       InkWell(
                         onTap: () {
                           Navigator.pushNamed(context, RoutesManager.register);
                         },
-                        child: Text("login".tr(),style:Theme.of(context).textTheme.titleSmall?.copyWith(
+                        child: Text("login".tr(), style: Theme
+                            .of(context)
+                            .textTheme
+                            .titleSmall
+                            ?.copyWith(
                             fontWeight: FontWeight.w500
-                        ) ,),
+                        ),),
                       )
                     ],
                   ),
@@ -158,15 +167,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         setState(() {
                           selectedLanguage = value;
                         });
-                        if(selectedLanguage=="ar"){
+                        if (selectedLanguage == "ar") {
                           context.setLocale(Locale("ar"));
-                        }else{
+                        } else {
                           context.setLocale(Locale("en"));
                         }
                       },
-                      values: ["en","ar"]
+                      values: ["en", "ar"]
                   )
-              
+
                 ],
               ),
             ),
@@ -175,24 +184,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
+  // autologin
+  createAccount() async {
+    try {
+      DialogUtils.showLoadingDialog(context);
+      var credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text
+      );
+      await FirestoreManager.addUser(MyUser.User(
+        id:credential.user?.uid ,
+        email: emailController.text,
+        name: nameController.text
+      ));
 
-  createAccount()async{
-   try{
-     var credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-         email: emailController.text,
-         password: passwordController.text
-     );
-     print("Done");
-   } on FirebaseAuthException catch(e){
-     if (e.code == 'weak-password') {
-    print('The password provided is too weak.');
-    } else if (e.code == 'email-already-in-use') {
-       print('The account already exists for that email.');
-     }
-   }catch(error){
-    print(error);
-   }
-
+      Navigator.pop(context);
+      Navigator.pushNamedAndRemoveUntil(context, RoutesManager.home, (route) => false);
+      print("Done");
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      if (e.code == 'weak-password') {
+        DialogUtils.showMessageDialog(context: context,
+            message: 'The password provided is too weak.',
+            positiveActionTitle: "Ok",
+            positiveActionPress: (){
+              Navigator.pop(context);
+            });
+      } else if (e.code == 'email-already-in-use') {
+        DialogUtils.showMessageDialog(context: context,
+            message: 'The account already exists for that email.',
+            positiveActionTitle: "Ok",
+            positiveActionPress: (){
+              Navigator.pop(context);
+            });
+      }
+    } catch (error) {
+      Navigator.pop(context);
+      DialogUtils.showMessageDialog(context: context,
+          message: "No Interntet Connection",
+          positiveActionTitle: "Ok",
+          positiveActionPress: (){
+            Navigator.pop(context);
+          });
+      print(error);
+    }
   }
 
 }

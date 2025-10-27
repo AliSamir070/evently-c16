@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently_c16/core/resources/AppConstants.dart';
+import 'package:evently_c16/core/resources/DialogUtils.dart';
 import 'package:evently_c16/core/resources/RoutesManager.dart';
 import 'package:evently_c16/core/reusable_components/CustomButton.dart';
 import 'package:evently_c16/ui/register/screen/register_screen.dart';
@@ -42,6 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     selectedLanguage = context.locale.languageCode;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SafeArea(
@@ -95,7 +97,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {},
                       child: Text(
                         "forgotPass".tr(),
-                        style: Theme.of(context).textTheme.titleSmall,
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .titleSmall,
                       )),
                 ),
                 SizedBox(
@@ -112,14 +117,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("dontHaveAccount".tr(),style: Theme.of(context).textTheme.bodyMedium,),
+                    Text("dontHaveAccount".tr(), style: Theme
+                        .of(context)
+                        .textTheme
+                        .bodyMedium,),
                     InkWell(
                       onTap: () {
                         Navigator.pushNamed(context, RoutesManager.register);
                       },
-                      child: Text("createAcc".tr(),style:Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w500
-                      ) ,),
+                      child: Text("createAcc".tr(), style: Theme
+                          .of(context)
+                          .textTheme
+                          .titleSmall
+                          ?.copyWith(
+                          fontWeight: FontWeight.w500
+                      ),),
                     )
                   ],
                 ),
@@ -132,13 +144,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       setState(() {
                         selectedLanguage = value;
                       });
-                      if(selectedLanguage=="ar"){
+                      if (selectedLanguage == "ar") {
                         context.setLocale(Locale("ar"));
-                      }else{
+                      } else {
                         context.setLocale(Locale("en"));
                       }
                     },
-                    values: ["en","ar"]
+                    values: ["en", "ar"]
                 )
 
               ],
@@ -148,19 +160,45 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-  signin()async{
+
+  signin() async {
     try {
+      DialogUtils.showLoadingDialog(context);
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text,
           password: passwordController.text
       );
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, RoutesManager.home);
       print(credential.user!.uid);
     } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        DialogUtils.showMessageDialog(
+            context: context,
+            message: 'No user found for that email.',
+            positiveActionTitle: "Ok",
+            positiveActionPress: (){
+              Navigator.pop(context);
+            });
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+        DialogUtils.showMessageDialog(
+            context: context,
+            message: 'Wrong password provided for that user.',
+            positiveActionTitle: "Ok",
+            positiveActionPress: (){
+              Navigator.pop(context);
+            });
       }
+    } catch (e) {
+      Navigator.pop(context);
+      DialogUtils.showMessageDialog(
+          context: context,
+          message: "No Internet Connection",
+          positiveActionTitle: "Ok",
+          positiveActionPress: (){
+            Navigator.pop(context);
+          });
     }
   }
 }
