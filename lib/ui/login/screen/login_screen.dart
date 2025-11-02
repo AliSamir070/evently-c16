@@ -94,7 +94,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 Align(
                   alignment: AlignmentDirectional.centerEnd,
                   child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, RoutesManager.forgotPass);
+                      },
                       child: Text(
                         "forgotPass".tr(),
                         style: Theme

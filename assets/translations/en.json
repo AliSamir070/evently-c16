@@ -12,5 +12,8 @@
   "createAcc": "Create Account",
   "name": "Name",
   "alreadyHaveAcc": "Already Have Account ?",
-  "rePass": "Re Password"
+  "rePass": "Re Password",
+  "forgetPass": "Forget Password",
+  "resetPass": "Reset Password",
+  "logout": "Logout"
 }

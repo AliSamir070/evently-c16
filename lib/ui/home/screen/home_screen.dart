@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
           onPressed: (){
-
+            Navigator.pushNamed(context, RoutesManager.createEvent);
           },
         child: Icon(Icons.add,size: 40,),
       ),

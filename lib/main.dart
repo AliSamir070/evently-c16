@@ -4,6 +4,8 @@ import 'package:evently_c16/core/resources/RoutesManager.dart';
 import 'package:evently_c16/core/source/local/PrefsManager.dart';
 import 'package:evently_c16/providers/ThemeProvider.dart';
 import 'package:evently_c16/providers/UserProvider.dart';
+import 'package:evently_c16/ui/create_event/screen/create_event_screen.dart';
+import 'package:evently_c16/ui/forgot_pass/screen/forgot_pass_screen.dart';
 import 'package:evently_c16/ui/home/screen/home_screen.dart';
 import 'package:evently_c16/ui/login/screen/login_screen.dart';
 import 'package:evently_c16/ui/register/screen/register_screen.dart';
@@ -55,6 +57,8 @@ class MyApp extends StatelessWidget {
         RoutesManager.start:(_)=>StartScreen(),
         RoutesManager.login:(_)=>LoginScreen(),
         RoutesManager.register:(_)=>RegisterScreen(),
+        RoutesManager.forgotPass:(_)=>ForgotPassScreen(),
+        RoutesManager.createEvent:(_)=>CreateEventScreen(),
         RoutesManager.home:(_)=>ChangeNotifierProvider(
             create: (context) => UserProvider(),
             child: HomeScreen()),

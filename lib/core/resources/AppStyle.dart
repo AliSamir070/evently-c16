@@ -3,6 +3,16 @@ import 'package:flutter/material.dart';
 
 class AppStyle{
   static ThemeData lightTheme = ThemeData(
+    dropdownMenuTheme: DropdownMenuThemeData(
+      inputDecorationTheme: InputDecorationTheme(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16)
+        ),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16)
+        )
+      )
+    ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: ColorsManager.primaryColor,
       shape: StadiumBorder(
